@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  	xmlns:h="http://java.sun.com/jsf/html"
+  	xmlns:f="http://java.sun.com/jsf/core"
+  	xmlns:ui="http://java.sun.com/jsf/facelets"
+  	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Consultar</title>
+</h:head>
+
+<h:body>
+		<p:link value="Consultar" outcome="/pages/versao.xhtml" />
+		|
+		<p:link value="Incluir" outcome="/pages/incluir.xhtml" />
+		<br/><br/>
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			<h:panelGroup>
+				<p:outputLabel for="codigo" value="Código da Versão:" />
+				<p:inputText id="codigo" value="#{versaoMB.filtro.id}" />
+
+				<p:outputLabel for="data" value="Data da Versão:" />
+				<p:calendar id="data" value="#{versaoMB.filtro.data}" />
+
+				<p:outputLabel for="numero" value="Número da Versão:" />
+				<p:inputText id="numero" value="#{versaoMB.filtro.numeroVersao}" />
+				
+
+				<p:commandButton value="Consultar" action="#{versaoMB.consultar()}" update=":form:eventsDT"/>
+				<p:commandButton value="Limpar" action="#{versaoMB.limparFiltro()}" />
+				
+				<br/><br/>
+				
+				<p:dataTable id="eventsDT" 
+					var="versao"
+					value="#{versaoMB.resultado}"
+					emptyMessage="Nenhuma Versão Encontrada">
+
+					<f:facet name="header">
+	            		Resultado Consulta Versão
+	        		</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{versao.id}" />
+					</p:column>
+					<p:column headerText="Data">
+						<h:outputText value="#{versao.data}" />
+					</p:column>
+					<p:column headerText="Número Versão">
+						<h:outputText value="#{versao.numeroVersao}" />
+					</p:column>
+
+					<p:column style="width:32px;text-align: center">
+						<p:commandButton update=":form:tab-items"
+							icon="ui-icon-search" 
+							title="Visualizar">
+							<f:setPropertyActionListener value="#{versao}" target="#{versaoMB.versao}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+				
+				<br/><br/>
+
+				<p:dataTable var="item" value="#{versaoMB.versao.items}" id="tab-items" >
+					<f:facet name="header">
+	            		Items
+	        		</f:facet>
+					<p:column headerText="Item">
+						<h:outputText value="#{item.tituloDescricao}" />
+					</p:column>
+					<p:column headerText="Descrição">
+						<h:outputText value="#{item.descricao}" />
+					</p:column>
+					<p:column style="width:32px;text-align: center">
+						<p:commandButton update=":form:tab-items" icon="ui-icon-trash"	title="Excluir" 
+							actionListener="#{versaoMB.marcarItemExcluido(item)}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:commandButton value="Salvar Alterações" action="#{versaoMB.atualizarVersao()}" update=":form" />
+
+			</h:panelGroup>
+
+		</h:form>
+</h:body>
+</html>

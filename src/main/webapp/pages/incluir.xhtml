@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  	xmlns:h="http://java.sun.com/jsf/html"
+  	xmlns:f="http://java.sun.com/jsf/core"
+  	xmlns:ui="http://java.sun.com/jsf/facelets"
+  	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Incluir</title>
+</h:head>
+
+<h:body>
+	<p:link value="Consultar" outcome="/pages/versao.xhtml" />
+		|
+		<p:link value="Incluir" outcome="/pages/incluir.xhtml" />
+		<br/><br/><br/>
+		<h:form id="form">
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			
+			<h:panelGroup>
+				<p:growl id="growl" life="2000" />
+
+				<p:outputLabel for="data" value="Data da Versão:" />
+				<p:calendar id="data" value="#{versaoMB.versao.data}" />
+
+				<p:outputLabel for="numero" value="Número da Versão:" />
+				<p:inputText id="numero" value="#{versaoMB.versao.numeroVersao}" />
+				<hr />
+
+				<p:outputLabel for="item" value="Item:" />
+				<p:inputText id="item" value="#{versaoMB.itemTitulo}" />
+
+				<p:outputLabel for="desc" value="Descrição:" />
+				<p:inputText id="desc" value="#{versaoMB.descricao}" />
+
+				<p:commandButton value="Incluir"
+					actionListener="#{versaoMB.adicionarItem}" update="form" />
+				
+				<br/>
+				<br/>
+				<br/>
+				<p:dataTable var="item" value="#{versaoMB.versao.items}" rendered="#{not empty versaoMB.versao.items}" id="tab-items">
+					<p:column headerText="Item">
+						<h:outputText value="#{item.tituloDescricao}" />
+					</p:column>
+					<p:column headerText="Descrição">
+						<h:outputText value="#{item.descricao}" />
+					</p:column>
+				</p:dataTable>
+
+
+				<p:commandButton value="Salvar" action="#{versaoMB.incluir()}" update=":form" />
+			</h:panelGroup>
+
+			<br/>
+			<br/>
+			<p:dialog modal="true" resizable="false" header="Values"
+				widgetVar="dlg" showEffect="fold">
+				<p:panelGrid id="display" columns="2" columnClasses="label,value">
+
+					<h:outputText value="Popup:" />
+					<h:outputText value="#{versaoMB.versao.data}">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+</h:body>
+</html>
